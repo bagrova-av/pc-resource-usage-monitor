@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/PcResourceMonitor.dir/app/main.cpp.o CMakeFiles/PcResourceMonitor.dir/app/SystemMonitor/SystemMonitor.cpp.o -o PcResourceMonitor  /usr/lib64/libz.so
