@@ -21,6 +21,7 @@ FetchContent_MakeAvailable(httplib)
 set(SOURCE_LIST
     app/main.cpp
     app/SystemMonitor/SystemMonitor.cpp
+    app/WebServer/WebServer.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_LIST})
