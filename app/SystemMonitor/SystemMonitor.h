@@ -2,7 +2,13 @@
 #ifndef SYSTEM_MONITOR_H
 #define SYSTEM_MONITOR_H
 
-#include <string>
+#include <optional>
+
+struct MemoryInfo
+{
+    long totalMemory;
+    long usedMemory;
+};
 
 struct SystemStats
 {
@@ -21,10 +27,7 @@ public:
 
 private:
     float calculateCpuLoad();
-    void updateMemoryInfo();
-
-    long totalMemoryKb;
-    long usedMemoryKb;
+    std::optional<MemoryInfo> updateMemoryInfo();
 
     long lastUserTime;
     long lastNiceTime;

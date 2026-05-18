@@ -14,8 +14,6 @@ struct RawMemData
 };
 
 SystemMonitor::SystemMonitor() :
-    totalMemoryKb(0),
-    usedMemoryKb(0),
     lastUserTime(0),
     lastNiceTime(0),
     lastSystemTime(0),
@@ -25,30 +23,39 @@ SystemMonitor::SystemMonitor() :
 SystemStats SystemMonitor::getStats()
 {
     SystemStats stats;
-    updateMemoryInfo();
-    stats.totalMemory = totalMemoryKb;
-    stats.usedMemory = usedMemoryKb;
-    if (stats.totalMemory > 0)
+    auto memoryData = updateMemoryInfo();
+    if (memoryData.has_value())
     {
-        stats.memUsagePercentage = (static_cast<float>(stats.usedMemory) / stats.totalMemory) * 100;
+        stats.totalMemory = memoryData.value().totalMemory;
+        stats.usedMemory = memoryData.value().usedMemory;
+
+        if (stats.totalMemory > 0)
+        {
+            stats.memUsagePercentage = (static_cast<float>(stats.usedMemory) / stats.totalMemory) * 100.0f;
+        }
+    }
+    else
+    {
+        std::cerr << "[Monitor] Failed to fetch memory info" << std::endl;
     }
 
     stats.cpuUsagePercentage = calculateCpuLoad();
     return stats;
 }
 
- void SystemMonitor::updateMemoryInfo()
+std::optional<MemoryInfo> SystemMonitor::updateMemoryInfo()
 {
-    std::ifstream memFile("/proc/meminfo");
-    std::string line;
-
-    if (!memFile.is_open())
+    std::ifstream memoryFile("/proc/meminfo");
+    if (!memoryFile.is_open())
     {
-        std::cerr << "Error: Could not open /proc/meminfo" << '\n';
-        return;
+        return std::nullopt;
     }
 
-    while (std::getline(memFile, line))
+    std::string line;
+    long totalMemory = 0;
+    long availableMemory = 0;
+    int foundCount = 0;
+    while (std::getline(memoryFile, line))
     {
         std::stringstream ss(line);
         std::string label;
@@ -57,17 +64,28 @@ SystemStats SystemMonitor::getStats()
         if (line.find("MemTotal:") == 0)
         {
             ss >> label >> value;
-            this->totalMemoryKb = value;
+            totalMemory = value;
+            foundCount++;
         }
         else if (line.find("MemAvailable:") == 0)
         {
             ss >> label >> value;
-            long availableMemoryKb = value;
-            this->usedMemoryKb = this->totalMemoryKb - availableMemoryKb;
+            availableMemory = value;
+            foundCount++;
+        }
+
+        if (foundCount == 2)
+        {
+            break;
         }
     }
-}
 
+    if (foundCount < 2)
+    {
+        return std::nullopt;
+    }
+    return MemoryInfo{totalMemory, totalMemory - availableMemory};
+}
 
 float SystemMonitor::calculateCpuLoad()
 {
