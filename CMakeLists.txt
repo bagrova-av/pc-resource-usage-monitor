@@ -22,6 +22,7 @@ set(SOURCE_LIST
     app/main.cpp
     app/SystemMonitor/SystemMonitor.cpp
     app/WebServer/WebServer.cpp
+    app/Application/Application.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_LIST})
@@ -30,6 +31,7 @@ target_include_directories (${PROJECT_NAME} PRIVATE
     app/
     app/SystemMonitor/
     app/WebServer/
+    app/Application/
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

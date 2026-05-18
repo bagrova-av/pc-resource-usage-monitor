@@ -25,3 +25,8 @@ void WebServer::start(const std::string& host, int port)
 {
     server.listen(host.c_str(), port);
 }
+
+void WebServer::stop()
+{
+    server.stop();
+}

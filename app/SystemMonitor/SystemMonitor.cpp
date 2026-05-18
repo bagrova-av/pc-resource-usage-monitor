@@ -44,7 +44,7 @@ SystemStats SystemMonitor::getStats()
 
     if (!memFile.is_open())
     {
-        std::cerr << "Error: Could not open /proc/meminfo" << std::endl;
+        std::cerr << "Error: Could not open /proc/meminfo" << '\n';
         return;
     }
 

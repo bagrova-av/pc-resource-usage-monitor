@@ -11,7 +11,9 @@ class WebServer
 {
 public:
     WebServer(SystemMonitor& monitor);
+
     void start(const std::string& host, int port);
+    void stop();
 
 private:
     httplib::Server server;
