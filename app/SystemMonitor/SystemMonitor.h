@@ -21,7 +21,10 @@ public:
 
 private:
     float calculateCpuLoad();
-    float calculateMemoryLoad();
+    void updateMemoryInfo();
+
+    long totalMemoryKb;
+    long usedMemoryKb;
 
     long lastUserTime;
     long lastNiceTime;

@@ -1,0 +1,113 @@
+:root {
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --primary: #2ecc71;
+    --border: #e2e8f0;
+    --text-dark: #1e293b;
+    --text-light: #64748b;
+    --gauge-empty: #f1f5f9;
+    
+    --color-low: #2ecc71;
+    --color-medium: #f1c40f;
+    --color-high: #e74c3c;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-dark);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 900px;
+    padding: 40px 20px;
+}
+
+header {
+    margin-bottom: 40px;
+}
+
+h1 { margin: 0; font-size: 28px; }
+.subtitle { color: var(--text-light); margin: 5px 0 0; }
+
+.dashboard {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    justify-content: space-between;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 25px;
+    flex: 1;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-info h3 { margin: 0; font-size: 16px; color: var(--text-light); }
+
+.badge {
+    background: #f0fff4;
+    color: #38a169;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.gauge-wrapper {
+    position: relative;
+    text-align: center;
+}
+
+.gauge {
+    width: 100%;
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+}
+
+.gauge-bg {
+    stroke: var(--gauge-empty);
+}
+
+.gauge-fill {
+    stroke: var(--color-low);
+    stroke-dasharray: 126;
+    stroke-dashoffset: 126; 
+    transition: stroke-dashoffset 0.5s ease, stroke 0.5s ease;
+}
+
+.gauge-value {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.details {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.status-text { color: var(--primary); font-weight: bold; }

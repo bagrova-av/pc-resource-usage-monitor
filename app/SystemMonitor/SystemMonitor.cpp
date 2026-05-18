@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 #include <string>
 #include <vector>
@@ -13,6 +14,8 @@ struct RawMemData
 };
 
 SystemMonitor::SystemMonitor() :
+    totalMemoryKb(0),
+    usedMemoryKb(0),
     lastUserTime(0),
     lastNiceTime(0),
     lastSystemTime(0),
@@ -22,56 +25,49 @@ SystemMonitor::SystemMonitor() :
 SystemStats SystemMonitor::getStats()
 {
     SystemStats stats;
-    stats.memUsagePercentage = calculateMemoryLoad();
+    updateMemoryInfo();
+    stats.totalMemory = totalMemoryKb;
+    stats.usedMemory = usedMemoryKb;
+    if (stats.totalMemory > 0)
+    {
+        stats.memUsagePercentage = (static_cast<float>(stats.usedMemory) / stats.totalMemory) * 100;
+    }
+
     stats.cpuUsagePercentage = calculateCpuLoad();
     return stats;
 }
 
-float SystemMonitor::calculateMemoryLoad()
+ void SystemMonitor::updateMemoryInfo()
 {
     std::ifstream memFile("/proc/meminfo");
+    std::string line;
+
     if (!memFile.is_open())
     {
-        return 0.0;
+        std::cerr << "Error: Could not open /proc/meminfo" << std::endl;
+        return;
     }
-
-    std::string line;
-    long totalMem = 0;
-    long availableMem = 0;
 
     while (std::getline(memFile, line))
     {
-        if (line.find("MemTotal:") == 0 || line.find("MemAvailable:") == 0)
-        {
-            std::stringstream ss(line);
-            std::string label;
-            long value;
+        std::stringstream ss(line);
+        std::string label;
+        long value;
 
+        if (line.find("MemTotal:") == 0)
+        {
             ss >> label >> value;
-            if (label == "MemTotal:")
-            {
-                totalMem = value;
-            }
-            else
-            {
-                availableMem = value;
-            }
+            this->totalMemoryKb = value;
         }
-
-        if (totalMem > 0 && availableMem > 0)
+        else if (line.find("MemAvailable:") == 0)
         {
-            break;
+            ss >> label >> value;
+            long availableMemoryKb = value;
+            this->usedMemoryKb = this->totalMemoryKb - availableMemoryKb;
         }
     }
-
-    if (totalMem == 0)
-    {
-        return 0.0;
-    }
-    long usedMem = totalMem - availableMem;
-    double percentage = (static_cast<float>(usedMem) / totalMem) * 100.0;
-    return percentage;
 }
+
 
 float SystemMonitor::calculateCpuLoad()
 {

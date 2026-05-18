@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>System Usage Monitor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>System Performance</h1>
+            <p class="subtitle">Live diagnostics from Linux kernel</p>
+        </header>
+
+        <main class="dashboard">
+            <div class="card">
+                <div class="card-info">
+                    <h3>Processor</h3>
+                    <span class="badge">CPU</span>
+                </div>
+                <div class="gauge-wrapper">
+                    <svg viewBox="0 0 100 55" class="gauge">
+                        <path class="gauge-bg" d="M10,50 A40,40 0 0,1 90,50" />
+                        <path id="cpu-gauge" class="gauge-fill" d="M10,50 A40,40 0 0,1 90,50" />
+                    </svg>
+                    <div class="gauge-value"><span id="cpu-text">0</span>%</div>
+                </div>
+                <div class="details">
+                    Status: <span class="status-text">Active</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-info">
+                    <h3>Memory</h3>
+                    <span class="badge">RAM</span>
+                </div>
+                <div class="gauge-wrapper">
+                    <svg viewBox="0 0 100 55" class="gauge">
+                        <path class="gauge-bg" d="M10,50 A40,40 0 0,1 90,50" />
+                        <path id="mem-gauge" class="gauge-fill" d="M10,50 A40,40 0 0,1 90,50" />
+                    </svg>
+                    <div class="gauge-value"><span id="mem-text">0</span>%</div>
+                </div>
+                <div class="details">
+                    <span id="mem-abs">0.0 / 0.0 GB</span>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
